@@ -1,18 +1,21 @@
-import { useState } from 'react'
+import { useState,useReducer ,useEffect} from 'react'
 import { Header } from './components/Header'
 import './App.css'
+import PowerInputForm from './components/PowerInputForm';
+
 
 
 function App() {
- const arr=useState(0);
-  console.log(arr)
-
+ 
   return (
-    <>
+    <div id='app'>
     
     <Header img="https://cdn.shopify.com/s/files/1/2980/5140/articles/electricity_bill.jpg?v=1623842931"></Header>
-    <button>change image</button>
-    </>
+    <main id='reading'>
+      <PowerInputForm></PowerInputForm>
+    </main>
+
+    </div>
   )
 }
 

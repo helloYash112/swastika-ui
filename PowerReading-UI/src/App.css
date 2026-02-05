@@ -1,8 +1,15 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+#app {
+  display: flex;
+  flex-direction: column; /* This is the key fix! */
+  justify-content: center; 
+  align-items: center;    
+  min-height: 100vh;
+  gap: 20px;              /* Adds some breathing room between date and form */
 }
 
 .logo {
@@ -16,6 +23,48 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+
+#input-form{
+  display: grid;
+  /* 4 Columns: Label (auto width), Input (takes remaining space), Label, Input */
+  grid-template-columns: auto 1fr auto 1fr; 
+  gap: 20px;          /* Vertical and horizontal spacing */
+  align-items: center; /* Keeps labels and inputs perfectly level */
+  width: 100%;
+ 
+}
+#btn{
+  grid-column: span 4; /* Stretches the button across all 4 columns */
+  margin: 20px auto 0; /* Centers the button horizontally */
+  width: 50%;          /* Adjust as needed */
+  padding: 12px;
+}
+#reading{
+ width: 600px; /* Increased slightly for two columns */
+  margin: 0 auto;
+  background-color: rgb(221, 153, 17);
+  padding: 40px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label {
+ font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+}
+
+input {
+ width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #555;
+  background-color: #2c2c2c;
+  color: white;
 }
 
 @keyframes logo-spin {
@@ -40,3 +89,5 @@
 .read-the-docs {
   color: #888;
 }
+
+
