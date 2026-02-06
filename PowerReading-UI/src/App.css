@@ -12,6 +12,12 @@
   gap: 20px;              /* Adds some breathing room between date and form */
 }
 
+#meter{
+  background-color: #0c0c0c;
+  color: blue;
+
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
