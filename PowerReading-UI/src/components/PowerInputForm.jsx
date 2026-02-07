@@ -72,7 +72,7 @@ export default function PowerInputForm() {
         const obj={label :ele.id,value:ele.id};
         meterId.push(obj);
     })
-    console.log(meterId);
+    
 
      
     function handleMiterId(selectedId) {
@@ -112,6 +112,16 @@ function handleMiterName(selectedName) {
         });
     }
 }
+function display(){
+   
+    const{label,value}=mName;
+    console.log(`meter label : ${label} meter value : ${value}`)
+    
+   const { label: miterId, value: miterValue } = mId; 
+    
+    console.log(`miter id : ${miterId} miter value : ${miterValue}`);
+
+}
 
     return (
         <form id="input-form" onSubmit={(e) => e.preventDefault()}>
@@ -130,7 +140,7 @@ function handleMiterName(selectedName) {
               value={mName}            
               title='name' 
            />
-            <button id="btn">Submit</button>
+            <button id="btn" onClick={display}>Submit</button>
         </form>
     );
 }
