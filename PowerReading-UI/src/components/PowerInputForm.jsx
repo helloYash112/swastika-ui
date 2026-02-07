@@ -1,5 +1,5 @@
 import List from "./List.jsx";
-import { useReducer } from "react";
+import { useReducer,useRef } from "react";
 import { meters } from "../assets/meter.js";
 
 const intialState = { label: '', value: '' };
@@ -60,6 +60,8 @@ function meterNameReducer(state,action){
 export default function PowerInputForm() {
     const [mName, setMeterName] = useReducer(meterNameReducer, intialState);
      const [mId, setMeterId] = useReducer(meterIdReducer, intialState);
+     const kwhRef=useRef(null);
+       const pfRef=useRef(null);
 
     const meterName=[];
     const meterId=[];
@@ -112,14 +114,24 @@ function handleMiterName(selectedName) {
         });
     }
 }
+function display(){
+    const{label,value}=mName;
+    const{label:miterId,value:miterVal}=mId;
+    
+    
+    const kwh=kwhRef.current.value;
+    const pf=pfRef.current.value;
+    console.log(kwh);
+    alert(`kwh : ${kwh} pf : ${pf} miter-name is :${label}, miter-id :${miterId} `)
+}
 
     return (
         <form id="input-form" onSubmit={(e) => e.preventDefault()}>
             <label htmlFor="kwh">kwh :</label>
-            <input type='text' placeholder='enter a kwh value' id='kwh' />
+            <input type='text' placeholder='enter a kwh value' id='kwh' ref={kwhRef}/>
 
             <label htmlFor="pf">pf :</label>
-            <input type='text' placeholder='enter a pf value' id='pf' />
+            <input type='text' placeholder='enter a pf value' id='pf' ref={pfRef}/>
             <label htmlFor="meter">Miter-Id</label>
            <List options={meterId} onChange={handleMiterId} value={mId}  />
 
@@ -130,7 +142,7 @@ function handleMiterName(selectedName) {
               value={mName}            
               title='name' 
            />
-            <button id="btn">Submit</button>
+            <button id="btn" onClick={display}>Submit</button>
         </form>
     );
 }
