@@ -170,7 +170,7 @@ function display() {
 
             <label htmlFor="pf">pf :</label>
             <input type='text' placeholder='enter a pf value' id='pf' ref={pfRef}/>
-            <label htmlFor="meter">Miter-Id</label>
+            <label htmlFor="meter">Miter-Id :</label>
            <List options={meterId} onChange={handleMiterId} value={mId}  title='miterId'/>
 
             <label htmlFor="name">meter name :</label>
