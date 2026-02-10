@@ -1,0 +1,9 @@
+#input-form{
+  display: grid;
+  /* 4 Columns: Label (auto width), Input (takes remaining space), Label, Input */
+  grid-template-columns: auto 1fr auto 1fr; 
+  gap: 20px;          /* Vertical and horizontal spacing */
+  align-items: center; /* Keeps labels and inputs perfectly level */
+  width: 100%;
+ 
+}

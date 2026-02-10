@@ -1,21 +1,18 @@
-import { useState,useReducer ,useEffect} from 'react'
-import { Header } from './components/Header'
+import { Home } from './components/Home';
 import './App.css'
+
 import PowerInputForm from './components/PowerInputForm';
+import {Route, Routes} from 'react-router-dom';
 
 
 
 function App() {
  
   return (
-    <div id='app'>
-    
-    <Header img="https://cdn.shopify.com/s/files/1/2980/5140/articles/electricity_bill.jpg?v=1623842931"></Header>
-    <main id='reading'>
-      <PowerInputForm></PowerInputForm>
-    </main>
-
-    </div>
+    <Routes>
+    <Route path="/" element={<Home />} /> 
+    <Route path='/form' element={<PowerInputForm></PowerInputForm>}></Route>
+    </Routes>
   )
 }
 

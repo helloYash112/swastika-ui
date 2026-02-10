@@ -1,6 +1,8 @@
 import List from "./List.jsx";
 import { useReducer,useRef } from "react";
 import { meters } from "../assets/meter.js";
+import "./powerInputForm.css";
+
 
 const intialState = { label: '', value: '' };
 
@@ -12,8 +14,8 @@ function meterIdReducer(state,action){
         case 'udt-id':{
             return{
                 ...state,
-                label:action.payLoad.label,
-                value:action.payLoad.value
+                label:action.payload.label,
+                value:action.payload.value
 
             }
 
@@ -32,13 +34,14 @@ function meterIdReducer(state,action){
 
 }
 function meterNameReducer(state,action){
+   
 
     switch(action.type){
         case 'udt-name':{
             return{
                 ...state,
-                label:action.payLoad.label,
-                value:action.payLoad.value
+                label:action.payload.label,
+                value:action.payload.value
 
             }
 
@@ -56,7 +59,17 @@ function meterNameReducer(state,action){
     }
 
 }
+function clearKwh(kwhRef){
+    kwhRef.current.value='';
+    kwhRef.current.focus();
 
+}
+
+function clearPf(pfRef){
+    pfRef.current.value='';
+    pfRef.current.focus();
+
+}
 export default function PowerInputForm() {
     const [mName, setMeterName] = useReducer(meterNameReducer, intialState);
      const [mId, setMeterId] = useReducer(meterIdReducer, intialState);
@@ -78,53 +91,76 @@ export default function PowerInputForm() {
 
      
     function handleMiterId(selectedId) {
+
+         if (!selectedId)
+         { 
+            setMeterName({ type: 'reset' }); 
+            setMeterId({ type: 'reset' });
+             return;
+             };
     if (selectedId) {
         const match = meters.find(ele => ele.id === selectedId.label);
         if (match) {
            
             setMeterId({
                 type: 'udt-id',
-                payLoad: { label: match.id, value: match.id }
+                payload: { label: match.id, value: match.id }
             });
             setMeterName({
                 type: 'udt-name',
-                payLoad: { label: match.name, value: match.name }
+                payload: { label: match.name, value: match.name }
             });
+        }
+        else{
+            setMeterId({
+                type:'udt-id',
+                payload:{
+                    label:selectedId.value,
+                    value:selectedId.value
+                }
+            })
+
         }
     }
 }
 
 function handleMiterName(selectedName) {
+    if (!selectedName)
+         { 
+            setMeterName({ type: 'reset' }); 
+            setMeterId({ type: 'reset' });
+             return;
+             };
     const match = meters.find(ele => ele.name === selectedName.label);
     if (match) {
        
         setMeterName({
             type: 'udt-name',
-            payLoad: { label: match.name, value: match.name }
+            payload: { label: match.name, value: match.name }
         });
         setMeterId({
             type: 'udt-id',
-            payLoad: { label: match.id, value: match.id }
+            payload: { label: match.id, value: match.id }
         });
     } else {
        
         setMeterName({
             type: 'udt-name',
-            payLoad: { label: selectedName.value, value: selectedName.value }
+            payload: { label: selectedName.value, value: selectedName.value }
         });
     }
 }
+
 function display() {
   const { label: meterLabel, value: meterValue } = mName;
   const { label: miterId, value: miterValue } = mId;
 
-  console.log(`meter label : ${meterLabel} meter value : ${meterValue}`);
-  console.log(`miter id : ${miterId} miter value : ${miterValue}`);
-
   const kwh = kwhRef.current.value;
   const pf = pfRef.current.value;
-
-  console.log(kwh);
+  clearKwh(kwhRef);
+  clearPf(pfRef);
+  setMeterName({type:'reset'});
+  setMeterId({type:'reset'});
   alert(`kwh : ${kwh}, pf : ${pf}, meter-name : ${meterLabel}, miter-id : ${miterId}`);
 }
 

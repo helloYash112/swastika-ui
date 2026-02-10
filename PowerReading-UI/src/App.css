@@ -5,11 +5,13 @@
 }
 #app {
   display: flex;
-  flex-direction: column; /* This is the key fix! */
+  flex-direction: column; 
   justify-content: center; 
   align-items: center;    
   min-height: 100vh;
-  gap: 20px;              /* Adds some breathing room between date and form */
+  gap: 20px;  
+  background-color: darkgoldenrod; 
+            
 }
 
 #meter{

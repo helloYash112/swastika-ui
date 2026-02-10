@@ -1,5 +1,6 @@
 import DateAndTime from "./DateAndTime"
-export const Header=({img,...props})=>{
+import logo1 from '../assets/logo/logo-3.png';
+export const Header=({img=logo1})=>{
     
 return <header>
     <img src={img} alt="home-image"  width={75} height={75} />
