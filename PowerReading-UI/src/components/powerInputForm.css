@@ -10,11 +10,12 @@
  
 }
 #btn{
-  grid-column: span 4; /* Stretches the button across all 4 columns */
-  margin: 20px auto 0; /* Centers the button horizontally */
-  width: 50%;          /* Adjust as needed */
+  grid-column: span 4; 
+  margin: 20px auto 0; 
+  width: 100%;          
   padding: 12px;
-  background-color: darkcyan;
+ background-color:maroon;
+  border-radius:10px ;
 }
 #reading{
  width: 600px; /* Increased slightly for two columns */
@@ -28,9 +29,10 @@
 }
 
 label {
- font-weight: bold;
-  text-align: right;
-  white-space: nowrap;
+ font-weight:900;
+  text-align:right;
+  white-space:unset;
+  color: black;
 }
 
 input {
@@ -41,5 +43,24 @@ input {
   background-color: #2c2c2c;
   color: white;
 }
+#miterId{
+ 
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+ 
+ background-color: rgb(221, 153, 17);
+ color: black;
+  
 
+}
+#miterName{
+color: black;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+ 
+  background-color: rgb(221, 153, 17);
+  
+}
 
