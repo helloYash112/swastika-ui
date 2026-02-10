@@ -3,7 +3,6 @@ import { useReducer,useRef } from "react";
 import { meters } from "../assets/meter.js";
 import "./powerInputForm.css";
 
-
 const intialState = { label: '', value: '' };
 
 
@@ -164,7 +163,7 @@ function display() {
   alert(`kwh : ${kwh}, pf : ${pf}, meter-name : ${meterLabel}, miter-id : ${miterId}`);
 }
 
-    return (
+    return (<div id="reading">
         <form id="input-form" onSubmit={(e) => e.preventDefault()}>
             <label htmlFor="kwh">kwh :</label>
             <input type='text' placeholder='enter a kwh value' id='kwh' ref={kwhRef}/>
@@ -183,5 +182,6 @@ function display() {
            />
             <button id="btn" onClick={display}>Submit</button>
         </form>
+        </div>
     );
 }
