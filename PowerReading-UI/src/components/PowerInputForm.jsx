@@ -1,187 +1,147 @@
 import List from "./List.jsx";
-import { useReducer,useRef } from "react";
+import { useReducer, useRef, useState } from "react";
 import { meters } from "../assets/meter.js";
 import "./powerInputForm.css";
 
-const intialState = { label: '', value: '' };
+// unified state shape
+const initialState = { id: "", name: "" };
 
-
-
-function meterIdReducer(state,action){
-
-    switch(action.type){
-        case 'udt-id':{
-            return{
-                ...state,
-                label:action.payload.label,
-                value:action.payload.value
-
-            }
-
-        }
-        case 'reset':
-            {
-            return intialState
-        }
-        default :{
-            return state;
-
-        }
-
-
-    }
-
-}
-function meterNameReducer(state,action){
-   
-
-    switch(action.type){
-        case 'udt-name':{
-            return{
-                ...state,
-                label:action.payload.label,
-                value:action.payload.value
-
-            }
-
-        }
-        case 'reset':
-            {
-            return intialState
-        }
-        default :{
-            return state;
-
-        }
-
-
-    }
-
-}
-function clearKwh(kwhRef){
-    kwhRef.current.value='';
-    kwhRef.current.focus();
-
+function meterReducer(state, action) {
+  switch (action.type) {
+    case "set-id":
+      return { ...state, id: action.payload };
+    case "set-name":
+      return { ...state, name: action.payload };
+    case "reset":
+      return initialState;
+    default:
+      return state;
+  }
 }
 
-function clearPf(pfRef){
-    pfRef.current.value='';
-    pfRef.current.focus();
-
+function clearKwh(kwhRef) {
+  kwhRef.current.value = "";
+  kwhRef.current.focus();
 }
+
+function clearPf(pfRef) {
+  pfRef.current.value = "";
+  pfRef.current.focus();
+}
+
 export default function PowerInputForm() {
-    const [mName, setMeterName] = useReducer(meterNameReducer, intialState);
-     const [mId, setMeterId] = useReducer(meterIdReducer, intialState);
-     const kwhRef=useRef(null);
-       const pfRef=useRef(null);
+  const [meter, dispatch] = useReducer(meterReducer, initialState);
 
-    const meterName=[];
-    const meterId=[];
-    meters.forEach(ele=>{
-        const obj={label :ele.name,value:ele.name};
-        meterName.push(obj);
-    })
+  // keep options in state so new entries reflect immediately
+  const [meterIdOptions, setMeterIdOptions] = useState(
+    meters.map(m => ({ label: m.id, value: m.id }))
+  );
+  const [meterNameOptions, setMeterNameOptions] = useState(
+    meters.map(m => ({ label: m.name, value: m.name }))
+  );
 
-    meters.forEach(ele=>{
-        const obj={label :ele.id,value:ele.id};
-        meterId.push(obj);
-    })
-    
+  const kwhRef = useRef(null);
+  const pfRef = useRef(null);
 
-     
-    function handleMiterId(selectedId) {
-
-         if (!selectedId)
-         { 
-            setMeterName({ type: 'reset' }); 
-            setMeterId({ type: 'reset' });
-             return;
-             };
-    if (selectedId) {
-        const match = meters.find(ele => ele.id === selectedId.label);
-        if (match) {
-           
-            setMeterId({
-                type: 'udt-id',
-                payload: { label: match.id, value: match.id }
-            });
-            setMeterName({
-                type: 'udt-name',
-                payload: { label: match.name, value: match.name }
-            });
-        }
-        else{
-            setMeterId({
-                type:'udt-id',
-                payload:{
-                    label:selectedId.value,
-                    value:selectedId.value
-                }
-            })
-
-        }
+  function handleMiterId(selected) {
+    if (!selected) {
+      dispatch({ type: "reset" });
+      return;
     }
-}
-
-function handleMiterName(selectedName) {
-    if (!selectedName)
-         { 
-            setMeterName({ type: 'reset' }); 
-            setMeterId({ type: 'reset' });
-             return;
-             };
-    const match = meters.find(ele => ele.name === selectedName.label);
+    const match = meters.find(ele => ele.id === selected.value);
     if (match) {
-       
-        setMeterName({
-            type: 'udt-name',
-            payload: { label: match.name, value: match.name }
-        });
-        setMeterId({
-            type: 'udt-id',
-            payload: { label: match.id, value: match.id }
-        });
+      dispatch({ type: "set-id", payload: match.id });
+      dispatch({ type: "set-name", payload: match.name });
     } else {
-       
-        setMeterName({
-            type: 'udt-name',
-            payload: { label: selectedName.value, value: selectedName.value }
-        });
+      // new ID → set ID, keep name if already typed
+      dispatch({ type: "set-id", payload: selected.value });
     }
-}
+  }
 
-function display() {
-  const { label: meterLabel, value: meterValue } = mName;
-  const { label: miterId, value: miterValue } = mId;
+  function handleMiterName(selected) {
+    if (!selected) {
+      dispatch({ type: "reset" });
+      return;
+    }
+    const match = meters.find(ele => ele.name === selected.value);
+    if (match) {
+      dispatch({ type: "set-id", payload: match.id });
+      dispatch({ type: "set-name", payload: match.name });
+    } else {
+      // new Name → set Name, keep ID if already typed
+      dispatch({ type: "set-name", payload: selected.value });
+    }
+  }
 
-  const kwh = kwhRef.current.value;
-  const pf = pfRef.current.value;
-  clearKwh(kwhRef);
-  clearPf(pfRef);
-  setMeterName({type:'reset'});
-  setMeterId({type:'reset'});
-  alert(`kwh : ${kwh}, pf : ${pf}, meter-name : ${meterLabel}, miter-id : ${miterId}`);
-}
+  function setNewEntryID(inputValue) {
+    const newEntry = { label: inputValue, value: inputValue };
+    setMeterIdOptions(prev => [...prev, newEntry]);
+    dispatch({ type: "set-id", payload: inputValue });
+  }
 
-    return (<div id="reading">
-        <form id="input-form" onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="kwh">kwh :</label>
-            <input type='text' placeholder='enter a kwh value' id='kwh' ref={kwhRef}/>
+  function setNewEntryName(inputValue) {
+    const newEntry = { label: inputValue, value: inputValue };
+    setMeterNameOptions(prev => [...prev, newEntry]);
+    dispatch({ type: "set-name", payload: inputValue });
+  }
 
-            <label htmlFor="pf">pf :</label>
-            <input type='text' placeholder='enter a pf value' id='pf' ref={pfRef}/>
-            <label htmlFor="meter">Miter-Id :</label>
-           <List options={meterId} onChange={handleMiterId} value={mId}  title='miterId'/>
+  function display() {
+    console.log("Meter:", meter);
+   const kwh=kwhRef.current.value;
+   const pf=pfRef.current.value;
 
-            <label htmlFor="name">meter name :</label>
-           <List 
-              options={meterName} 
-              onChange={handleMiterName} 
-              value={mName}            
-              title='miterName' 
-           />
-            <button id="btn" onClick={display}>Submit</button>
-        </form>
-        </div>
-    );
+    // persist new pair into meters array if both filled
+    if (meter.id && meter.name) {
+      meters.push({ id: meter.id, name: meter.name });
+      console.log("New meter registered:", { id: meter.id, name: meter.name });
+    }
+    clearKwh(kwhRef);
+    clearPf(pfRef);
+    dispatch({type:'reset'});
+    alert(`kwh : ${ kwh}, pf : ${pf} meter-name : ${meter.name}, meter-id : ${meter.id}`)
+  }
+
+  return (
+    <div id="reading">
+      <form id="input-form" onSubmit={e => e.preventDefault()}>
+        <label htmlFor="kwh">kwh :</label>
+        <input
+          type="text"
+          placeholder="enter a kwh value"
+          id="kwh"
+          ref={kwhRef}
+        />
+
+        <label htmlFor="pf">pf :</label>
+        <input
+          type="text"
+          placeholder="enter a pf value"
+          id="pf"
+          ref={pfRef}
+        />
+
+        <label htmlFor="meter">Meter ID :</label>
+        <List
+          options={meterIdOptions}
+          onChange={handleMiterId}
+          createNewEntry={setNewEntryID}
+          value={meter.id ? { label: meter.id, value: meter.id } : null}
+          title="meterId"
+        />
+
+        <label htmlFor="name">Meter Name :</label>
+        <List
+          options={meterNameOptions}
+          onChange={handleMiterName}
+          createNewEntry={setNewEntryName}
+          value={meter.name ? { label: meter.name, value: meter.name } : null}
+          title="meterName"
+        />
+
+        <button id="btn" onClick={display}>
+          Submit
+        </button>
+      </form>
+    </div>
+  );
 }
