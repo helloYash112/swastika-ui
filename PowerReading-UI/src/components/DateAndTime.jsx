@@ -24,7 +24,7 @@ function DateAndTime() {
 
     return (
         <span>
-            <h3>{dateAndTime}</h3>
+            <h3 style={{ color: "blue", fontSize: "28px" }}>{dateAndTime}</h3>
         </span>
     );
 }
